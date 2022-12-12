@@ -15,4 +15,10 @@ export class Host {
 
   @Column()
   roomPrice: number;
+
+  @Column()
+  ownerName: string;
+
+  @Column()
+  ownerEmail: string;
 }
