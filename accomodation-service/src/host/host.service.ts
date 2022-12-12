@@ -21,6 +21,11 @@ export class HostService {
     return await this.hostRepository.findOneBy({ id });
   }
 
+  async findPrice(hostName: string) {
+    const resp = await this.hostRepository.findOneBy({ hostName });
+    return { roomPrice: resp.roomPrice };
+  }
+
   async update(id: number, data: any) {
     return await this.hostRepository
       .createQueryBuilder()
