@@ -11,7 +11,7 @@ export class Reservation {
   emailAdress: string;
 
   @Column()
-  guestHouseName: string;
+  guestHouseId: number;
 
   @Column()
   numberOfRooms: number;

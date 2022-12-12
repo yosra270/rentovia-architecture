@@ -29,9 +29,9 @@ export class HostController {
     return await this.hostService.findOne(+id);
   }
 
-  @Get('price/:hostName')
-  async findPrice(@Param('hostName') hostName: string) {
-    return await this.hostService.findPrice(hostName);
+  @Get('price/:id')
+  async findPrice(@Param('id') id: number) {
+    return await this.hostService.findPrice(id);
   }
 
   @Patch(':id')
