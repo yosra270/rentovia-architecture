@@ -19,6 +19,9 @@ export class Bill {
   @Prop({type: String ,default:false})
   location;
 
+  @Prop({type: String ,default:false})
+  guestHouseId;
+
   @Prop({type:Number ,default:false})
   numberOfRooms; 
   @Prop({type:Number ,default:false})
@@ -29,8 +32,6 @@ export class Bill {
 
   @Prop({type:Number ,default:false})
   totalPrice; 
-
-  
 
   @Prop({type:Number ,default:false})
   taxAmount; 

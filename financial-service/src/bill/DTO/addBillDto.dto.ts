@@ -15,6 +15,9 @@ export class addBillDto {
   
   @IsNumber()
   roomPrice;
+  
+  @IsString()
+  guestHouseId;
 
   @IsDate()
   startDate;
