@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="facture" format="json">
+      <types:shape format="weave" example="examples/facture-example.json"><![CDATA[%dw 2.0
+
+type facture = {|
+  useremail: String, 
+  location: String, 
+  numberOfRooms: Number {"typeId": "int"}, 
+  numberOfDays: Number {"typeId": "int"}, 
+  priceWithoutTax: Number {"typeId": "int"}, 
+  totalPrice: Number {"typeId": "int"}, 
+  taxAmount: Number {"typeId": "int"}, 
+  startDate: String, 
+  endDate: String, 
+  deleted: Boolean, 
+  deleted_At: Null, 
+  roomPrice: Number {"typeId": "int"}, 
+  "_id": String, 
+  createdAt: String, 
+  updatedAt: String, 
+  "__v": Number {"typeId": "int"}
+|} {"example": "{\\\"useremail\\\":\\\"benslamasouheil@gmail.com\\\",\\\"location\\\":\\\"mahdia\\\",\\\"numberOfRooms\\\":3,\\\"numberOfDays\\\":3,\\\"priceWithoutTax\\\":180,\\\"totalPrice\\\":234,\\\"taxAmount\\\":54,\\\"startDate\\\":\\\"2011-10-10T00:00:00.000Z\\\",\\\"endDate\\\":\\\"2011-10-13T00:00:00.000Z\\\",\\\"deleted\\\":false,\\\"deleted_At\\\":null,\\\"roomPrice\\\":20,\\\"_id\\\":\\\"639732f3130baec0c935b827\\\",\\\"createdAt\\\":\\\"2022-12-12T13:56:03.955Z\\\",\\\"updatedAt\\\":\\\"2022-12-12T13:56:03.955Z\\\",\\\"__v\\\":0}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="bill" format="json">
+      <types:shape format="weave" example="examples/bill-example.json"><![CDATA[%dw 2.0
+
+type bill = {|
+  useremail: String, 
+  location: String, 
+  numberOfRooms: Number {"typeId": "int"}, 
+  roomPrice: Number {"typeId": "int"}, 
+  startDate: String, 
+  endDate: String
+|} {"example": "{\\\"useremail\\\":\\\"benslamasouheil@gmail.com\\\",\\\"location\\\":\\\"mahdia\\\",\\\"numberOfRooms\\\":3,\\\"roomPrice\\\":25,\\\"startDate\\\":\\\"2011-10-10\\\",\\\"endDate\\\":\\\"2011-10-13\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="price" format="json">
+      <types:shape format="weave" example="examples/price-example.json"><![CDATA[%dw 2.0
+
+type price = Array<{|  fullName: String,   emailAddress: String,   guestHouseId: Number {"typeId": "int"},   numberOfRooms: Number {"typeId": "int"},   location: String,   startDate: String,   endDate: String,   id: Number {"typeId": "int"},   roomPrice: Number {"typeId": "int"}|}> {"example": "[{\\\"fullName\\\":\\\"Yasmine Cherif\\\",\\\"emailAddress\\\":\\\"yasmine.cherif9@gmail.com\\\",\\\"guestHouseId\\\":1,\\\"numberOfRooms\\\":3,\\\"location\\\":\\\"Tunis\\\",\\\"startDate\\\":\\\"2022-12-11\\\",\\\"endDate\\\":\\\"2022-12-14\\\",\\\"id\\\":6},{\\\"roomPrice\\\":110}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#169f4682-ee6e-4199-bd67-77cfc661bd19">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="bill"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

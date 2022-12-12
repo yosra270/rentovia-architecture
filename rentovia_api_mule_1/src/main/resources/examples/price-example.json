@@ -1,0 +1,15 @@
+[
+	{
+	    "fullName": "Yasmine Cherif",
+	    "emailAddress": "yasmine.cherif9@gmail.com",
+	    "guestHouseId": 1,
+	    "numberOfRooms": 3,
+	    "location": "Tunis",
+	    "startDate": "2022-12-11",
+	    "endDate": "2022-12-14",
+	    "id": 6
+	},
+	{
+	    "roomPrice": 110
+	}
+]

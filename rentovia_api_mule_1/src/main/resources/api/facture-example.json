@@ -1,0 +1,18 @@
+{
+    "useremail": "benslamasouheil@gmail.com",
+    "location": "mahdia",
+    "numberOfRooms": 3,
+    "numberOfDays": 3,
+    "priceWithoutTax": 180,
+    "totalPrice": 234,
+    "taxAmount": 54,
+    "startDate": "2011-10-10T00:00:00.000Z",
+    "endDate": "2011-10-13T00:00:00.000Z",
+    "deleted": false,
+    "deleted_At": null,
+    "roomPrice": 20,
+    "_id": "639732f3130baec0c935b827",
+    "createdAt": "2022-12-12T13:56:03.955Z",
+    "updatedAt": "2022-12-12T13:56:03.955Z",
+    "__v": 0
+}
