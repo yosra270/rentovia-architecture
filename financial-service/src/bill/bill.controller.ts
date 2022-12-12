@@ -1,6 +1,8 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { BillService } from './bill.service';
 import { addBillDto } from './DTO/addBillDto.dto';
+
 
 @Controller('bill')
 export class BillController {
@@ -15,7 +17,9 @@ export class BillController {
         var tax_percentage= 0.3
         var tax_amount = tax_percentage * price_Without_taxe 
         var total_price= price_Without_taxe + tax_amount
-        const newBill = await this.billService.createBill({...bill, numberOfDays: difference_in_days, priceWithoutTax:price_Without_taxe , taxAmount:tax_amount, totalPrice: total_price});
+        var reference = randomUUID().toString();
+         console.log(reference)
+        const newBill = await this.billService.createBill({...bill, numberOfDays: difference_in_days, priceWithoutTax:price_Without_taxe , taxAmount:tax_amount, totalPrice: total_price,reference:reference});
         
 
         return response.status(HttpStatus.CREATED).json(newBill) ;    

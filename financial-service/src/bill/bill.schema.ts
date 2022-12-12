@@ -30,6 +30,8 @@ export class Bill {
   @Prop({type:Number ,default:false})
   totalPrice; 
 
+  
+
   @Prop({type:Number ,default:false})
   taxAmount; 
 
