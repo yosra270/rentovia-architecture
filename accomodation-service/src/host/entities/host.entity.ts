@@ -17,7 +17,7 @@ export class Host {
   roomPrice: number;
 
   @Column()
-  ownerNamme: string;
+  ownerName: string;
 
   @Column()
   ownerEmail: string;
