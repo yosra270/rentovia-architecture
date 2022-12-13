@@ -3,7 +3,7 @@ import InvoiceGenerator from "./services/pdfGenerator.js";
 import facture from "./data.js";
 
 const app = express();
-const Port = 3000;
+const Port = 3005;
 app.use(express.json());
 
 app.post("/contrat", async (req, res, next) => {

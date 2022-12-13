@@ -13,6 +13,9 @@
 	<http:request-config name="HTTP_Request_reservation" doc:name="HTTP Request configuration" doc:id="7ade9163-1b3c-45ba-9dbf-12cbb6381b3b" >
 		<http:request-connection host="localhost" port="3001" />
 	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="488e5c6d-85ad-4619-bc8c-ed3dee351590" >
+		<http:request-connection host="localhost" port="3005" />
+	</http:request-config>
 	<flow name="rentovia_api_raml-main">
         <http:listener config-ref="rentovia_api_raml-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -134,18 +137,20 @@ output application/json
     </flow>
     <flow name="post:\reservation:application\json:rentovia_api_raml-config">
         <http:listener doc:name="Listener" doc:id="e969ee56-8ef0-4990-9269-d5a605971343" config-ref="rentovia_api_raml-httpListenerConfig" path="\reservation"/>
+		<set-variable value="#[payload.fullName]" doc:name="Set Variable" doc:id="89ec32a7-5735-492b-b76e-2249704cf33c" variableName="fullName" />
 		<scatter-gather doc:name="Scatter-Gather" doc:id="03233815-992c-4588-999f-a25a4b171ce7" >
 			<route >
 				<http:request method="POST" doc:name="Save_reservation" doc:id="8bc3b686-526e-464b-8146-26fdc64aaecd" config-ref="HTTP_Request_reservation" path="/reservation"/>
 			</route>
 			<route >
-				<http:request method="GET" doc:name="Get_Room_Price" doc:id="e9675997-5a88-4cdd-ace6-b570e52375c4" config-ref="HTTP_Request_host" path="/host/price/{guestHouseId}">
+				<http:request method="GET" doc:name="Get_Room_Price" doc:id="e9675997-5a88-4cdd-ace6-b570e52375c4" config-ref="HTTP_Request_host" path="/host/{guestHouseId}">
 					<http:uri-params ><![CDATA[#[output application/java
 ---
 {
 	"guestHouseId" : payload.guestHouseId
 }]]]></http:uri-params>
 				</http:request>
+				<set-variable value="#[payload.ownerName]" doc:name="Set Variable" doc:id="cb885c03-0577-40f8-97bb-e566e6510eff" variableName="ownername"/>
 			</route>
 		</scatter-gather>
 		<ee:transform doc:name="Merge responses" doc:id="169f4682-ee6e-4199-bd67-77cfc661bd19" >
@@ -157,6 +162,7 @@ output application/json
 	useremail: payload["0"].payload.emailAddress,
 	location: payload["0"].payload.location,
 	numberOfRooms: payload["0"].payload.numberOfRooms,
+	guestHouseId: payload["0"].payload.guestHouseId,
 	roomPrice: payload["1"].payload.roomPrice,
 	startDate: payload["0"].payload.startDate,
 	endDate: payload["0"].payload.endDate
@@ -165,6 +171,78 @@ output application/json
 		</ee:transform>
 		<http:request method="POST" doc:name="Generate Bill" doc:id="1da2282f-b7b9-45a3-8683-4bb79fff60e8" config-ref="HTTP_Request_finance" path="/bill">
 		</http:request>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="3c258d4e-f434-4f3a-b207-297717c4bb50" >
+			<route >
+				<http:request method="POST" doc:name="Save Contract" doc:id="0b169860-f5ce-4bf7-bdd6-08feccb2451d" config-ref="HTTP_Request_configuration" path="/contrat">
+					<http:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+  "username": vars.fullName ,
+  "ownername": vars.ownername,
+  "ref": payload.reference,
+  "location": payload.location,
+  "totalPrice": payload.totalPrice,
+  "startDate": payload.startDate,
+  "endDate": payload.endDate,
+  "roomPrice": payload.roomPrice
+  
+}]]]></http:body>
+				</http:request>
+			</route>
+			<route >
+				<ee:transform doc:name="Trasnfer Bill" doc:id="f0bb3f00-e37b-458b-bdcd-3dd6c48f8569" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	useremail: payload.useremail,
+	location: payload.location,
+	numberOfRooms: payload.numberOfRooms,
+	numberOfDays: payload.numberOfDays,
+	priceWithoutTax: payload.priceWithoutTax,
+	totalPrice: payload.totalPrice,
+	taxAmount: payload.taxAmount,
+	startDate: payload.startDate,
+	endDate: payload.endDate,
+	deleted: payload.deleted,
+	deleted_At: payload.deleted_At,
+	roomPrice: payload.roomPrice,
+	"_id": payload."_id",
+	createdAt: payload.createdAt,
+	updatedAt: payload.updatedAt,
+	"__v": payload."__v"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+		</scatter-gather>
+		<ee:transform doc:name="Transfer Bill" doc:id="56c4303b-074c-4150-af10-1881be42c18d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	useremail: payload."1".payload.useremail,
+	location: payload."1".payload.location,
+	numberOfRooms: payload."1".payload.numberOfRooms,
+	numberOfDays: payload."1".payload.numberOfDays,
+	priceWithoutTax: payload."1".payload.priceWithoutTax,
+	totalPrice: payload."1".payload.totalPrice,
+	taxAmount: payload."1".payload.taxAmount,
+	startDate: payload."1".payload.startDate,
+	endDate: payload."1".payload.endDate,
+	deleted: payload."1".payload.deleted,
+	deleted_At: payload."1".payload.deleted_At,
+	roomPrice: payload."1".payload.roomPrice,
+	"_id": payload."1".payload."_id",
+	createdAt: payload."1".payload.createdAt,
+	updatedAt: payload."1".payload.updatedAt,
+	"__v": payload."1".payload."__v"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="53c76eb7-2851-4899-a6b1-3478667d378c" />
     </flow>
 </mule>

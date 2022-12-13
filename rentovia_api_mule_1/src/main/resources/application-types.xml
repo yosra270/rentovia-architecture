@@ -56,4 +56,18 @@ type price = Array<{|  fullName: String,   emailAddress: String,   guestHouseId:
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#f0bb3f00-e37b-458b-bdcd-3dd6c48f8569">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="facture"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="facture"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>
